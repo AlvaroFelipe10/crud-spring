@@ -1,12 +1,14 @@
 package com.alvaro.dto.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
 import com.alvaro.dto.CourseDTO;
+import com.alvaro.dto.LessonDTO;
 import com.alvaro.enums.Category;
 import com.alvaro.model.Course;
-
-import ch.qos.logback.core.status.Status;
 
 @Component
 public class CourseMapper {
@@ -15,7 +17,13 @@ public class CourseMapper {
 		if(course == null) {
 			return null;
 		}
-		return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue());
+		List<LessonDTO> lessons = course.getLessons()
+				.stream()
+				.map(lesson -> new LessonDTO(lesson.getId(), lesson.getName(),lesson.getYoutubeUrl()))
+				.collect(Collectors.toList());
+		
+		return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue(),
+				lessons);
 	}
 	
 	public Course toEntity(CourseDTO courseDTO) {
