@@ -21,11 +21,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 
-@Data
+
 @Entity
 @SQLDelete(sql = "UPDATE Course SET status = 'Inativo' WHERE id = ?")
 @Where(clause = "status = 'Ativo'")
@@ -53,6 +54,54 @@ public class Course {
 	@Column(length =  10, nullable = false )
 	private Status status = Status.ACTIVE;
 	
+	@NotNull
+	@NotEmpty
+	@Valid
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Lesson> lessons = new ArrayList<>();
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	
+	public String getName() {
+		return name;
+	}
+	
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+	
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public List<Lesson> getLessons() {
+		return lessons;
+	}
+
+	public void setLessons(List<Lesson> lessons) {
+		this.lessons = lessons;
+	}
+	
+	
 }
